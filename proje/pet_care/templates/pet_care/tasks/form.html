@@ -1,0 +1,48 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}{% if task %}{{ task.get_task_type_display }} - Düzenle{% else %}Yeni Bakım Görevi{% endif %} - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h1>{% if task %}{{ task.get_task_type_display }} - Düzenle{% else %}Yeni Bakım Görevi{% endif %}</h1>
+    
+    <form method="post" style="margin-top: 1.5rem;">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="pet" class="form-label">Evcil Hayvan</label>
+            <select name="pet" id="pet" class="form-control" required>
+                <option value="">Evcil hayvan seçin</option>
+                {% for pet in pets %}
+                    <option value="{{ pet.pk }}" {% if selected_pet.pk == pet.pk %}selected{% endif %}>{{ pet.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="task_type" class="form-label">Görev Tipi</label>
+            <select name="task_type" id="task_type" class="form-control" required>
+                <option value="">Görev tipi seçin</option>
+                {% for type_code, type_name in task_types %}
+                    <option value="{{ type_code }}" {% if task and task.task_type == type_code %}selected{% endif %}>{{ type_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="description" class="form-label">Açıklama</label>
+            <textarea name="description" id="description" class="form-control" rows="3" required>{{ task.description|default:'' }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="due_date" class="form-label">Son Tarih</label>
+            <input type="datetime-local" name="due_date" id="due_date" class="form-control" value="{{ task.due_date|date:'Y-m-d\TH:i'|default:'' }}" required>
+        </div>
+        
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">{% if task %}Güncelle{% else %}Ekle{% endif %}</button>
+            <a href="{% url 'task-list' %}" class="btn btn-primary" style="background-color: #666;">İptal</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 

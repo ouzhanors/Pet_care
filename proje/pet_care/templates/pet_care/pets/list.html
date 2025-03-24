@@ -1,0 +1,37 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}Evcil Hayvanlarım - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Evcil Hayvanlarım</h1>
+        <a href="{% url 'pet-create' %}" class="btn btn-primary">Yeni Evcil Hayvan Ekle</a>
+    </div>
+</div>
+
+{% if pets %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        {% for pet in pets %}
+            <div class="card">
+                <h2>{{ pet.name }}</h2>
+                <div style="margin: 1rem 0;">
+                    <p><strong>Tür:</strong> {{ pet.species }}</p>
+                    <p><strong>Irk:</strong> {{ pet.breed }}</p>
+                    <p><strong>Doğum Tarihi:</strong> {{ pet.birth_date }}</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="{% url 'pet-detail' pet.pk %}" class="btn btn-primary">Detaylar</a>
+                    <a href="{% url 'pet-edit' pet.pk %}" class="btn btn-primary" style="background-color: #4caf50;">Düzenle</a>
+                    <a href="{% url 'pet-delete' pet.pk %}" class="btn btn-primary" style="background-color: #f44336;">Sil</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card">
+        <p>Henüz evcil hayvan eklenmemiş.</p>
+        <a href="{% url 'pet-create' %}" class="btn btn-primary" style="margin-top: 1rem;">İlk Evcil Hayvanınızı Ekleyin</a>
+    </div>
+{% endif %}
+{% endblock %} 

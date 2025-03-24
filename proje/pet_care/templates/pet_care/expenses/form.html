@@ -1,0 +1,48 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}{% if expense %}{{ expense.description }} - Düzenle{% else %}Yeni Harcama{% endif %} - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h1>{% if expense %}{{ expense.description }} - Düzenle{% else %}Yeni Harcama{% endif %}</h1>
+    
+    <form method="post" style="margin-top: 1.5rem;">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="pet" class="form-label">Evcil Hayvan</label>
+            <select name="pet" id="pet" class="form-control" required>
+                <option value="">Evcil hayvan seçin</option>
+                {% for pet in pets %}
+                    <option value="{{ pet.pk }}" {% if selected_pet.pk == pet.pk %}selected{% endif %}>{{ pet.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="description" class="form-label">Açıklama</label>
+            <input type="text" name="description" id="description" class="form-control" value="{{ expense.description|default:'' }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="amount" class="form-label">Tutar (TL)</label>
+            <input type="number" name="amount" id="amount" class="form-control" step="0.01" value="{{ expense.amount|default:'' }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="date" class="form-label">Tarih</label>
+            <input type="date" name="date" id="date" class="form-control" value="{{ expense.date|date:'Y-m-d'|default:'' }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="category" class="form-label">Kategori</label>
+            <input type="text" name="category" id="category" class="form-control" value="{{ expense.category|default:'' }}" required>
+        </div>
+        
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">{% if expense %}Güncelle{% else %}Ekle{% endif %}</button>
+            <a href="{% url 'expense-list' %}" class="btn btn-primary" style="background-color: #666;">İptal</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 

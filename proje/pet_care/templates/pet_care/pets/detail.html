@@ -1,0 +1,90 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}{{ pet.name }} - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1>{{ pet.name }}</h1>
+            <div style="margin: 1rem 0;">
+                <p><strong>Tür:</strong> {{ pet.species }}</p>
+                <p><strong>Irk:</strong> {{ pet.breed }}</p>
+                <p><strong>Doğum Tarihi:</strong> {{ pet.birth_date }}</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <a href="{% url 'pet-edit' pet.pk %}" class="btn btn-primary" style="background-color: #4caf50;">Düzenle</a>
+            <a href="{% url 'pet-delete' pet.pk %}" class="btn btn-primary" style="background-color: #f44336;">Sil</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Bekleyen Bakım Görevleri</h2>
+    {% if care_tasks %}
+        <div style="margin-top: 1rem;">
+            {% for task in care_tasks %}
+                <div style="border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                    <h3>{{ task.get_task_type_display }}</h3>
+                    <p>{{ task.description }}</p>
+                    <p><strong>Son Tarih:</strong> {{ task.due_date }}</p>
+                    <form method="post" action="{% url 'task-complete' task.pk %}" style="margin-top: 0.5rem;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary" style="background-color: #4caf50;">Tamamlandı</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Bekleyen bakım görevi yok.</p>
+    {% endif %}
+    <div style="margin-top: 1rem;">
+        <a href="{% url 'task-create' %}?pet={{ pet.pk }}" class="btn btn-primary">Yeni Bakım Görevi Ekle</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Son Harcamalar</h2>
+    {% if expenses %}
+        <div style="margin-top: 1rem;">
+            {% for expense in expenses %}
+                <div style="border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                    <h3>{{ expense.description }}</h3>
+                    <p><strong>Tutar:</strong> {{ expense.amount }} TL</p>
+                    <p><strong>Tarih:</strong> {{ expense.date }}</p>
+                    <p><strong>Kategori:</strong> {{ expense.category }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Henüz harcama kaydı yok.</p>
+    {% endif %}
+    <div style="margin-top: 1rem;">
+        <a href="{% url 'expense-create' %}?pet={{ pet.pk }}" class="btn btn-primary">Yeni Harcama Ekle</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Yaklaşan Hatırlatıcılar</h2>
+    {% if reminders %}
+        <div style="margin-top: 1rem;">
+            {% for reminder in reminders %}
+                <div style="border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem;">
+                    <h3>{{ reminder.title }}</h3>
+                    <p>{{ reminder.description }}</p>
+                    <p><strong>Hatırlatma Tarihi:</strong> {{ reminder.reminder_date }}</p>
+                    {% if reminder.is_recurring %}
+                        <p><strong>Tekrar:</strong> {{ reminder.recurrence_pattern }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Yaklaşan hatırlatıcı yok.</p>
+    {% endif %}
+    <div style="margin-top: 1rem;">
+        <a href="{% url 'reminder-create' %}?pet={{ pet.pk }}" class="btn btn-primary">Yeni Hatırlatıcı Ekle</a>
+    </div>
+</div>
+{% endblock %} 

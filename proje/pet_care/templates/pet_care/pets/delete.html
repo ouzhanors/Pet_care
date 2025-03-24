@@ -1,0 +1,22 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}{{ pet.name }} - Sil - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto;">
+    <h1>{{ pet.name }} - Sil</h1>
+    
+    <div style="margin: 1.5rem 0;">
+        <p>{{ pet.name }} isimli evcil hayvanınızı silmek istediğinizden emin misiniz?</p>
+        <p style="color: #f44336; margin-top: 0.5rem;">Bu işlem geri alınamaz ve tüm bakım görevleri, harcamalar ve hatırlatıcılar da silinecektir.</p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary" style="background-color: #f44336;">Evet, Sil</button>
+            <a href="{% url 'pet-detail' pet.pk %}" class="btn btn-primary" style="background-color: #666;">İptal</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 

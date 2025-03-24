@@ -1,0 +1,33 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}Giriş Yap - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 2rem auto;">
+    <h2>Giriş Yap</h2>
+    
+    <form method="post" style="margin-top: 1.5rem;">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_username" class="form-label">Kullanıcı Adı</label>
+            <input type="text" name="username" id="id_username" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="id_password" class="form-label">Şifre</label>
+            <input type="password" name="password" id="id_password" class="form-control" required>
+        </div>
+        
+        {% if form.errors %}
+            <div class="card" style="background-color: #ffebee; margin: 1rem 0;">
+                <p style="color: #c62828;">Kullanıcı adı veya şifre hatalı. Lütfen tekrar deneyin.</p>
+            </div>
+        {% endif %}
+        
+        <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary">Giriş Yap</button>
+        </div>
+    </form>
+</div>
+{% endblock %} 

@@ -1,0 +1,37 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}Harcamalar - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Harcamalar</h1>
+        <a href="{% url 'expense-create' %}" class="btn btn-primary">Yeni Harcama Ekle</a>
+    </div>
+</div>
+
+{% if expenses %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        {% for expense in expenses %}
+            <div class="card">
+                <h2>{{ expense.description }}</h2>
+                <div style="margin: 1rem 0;">
+                    <p><strong>Evcil Hayvan:</strong> {{ expense.pet.name }}</p>
+                    <p><strong>Tutar:</strong> {{ expense.amount }} TL</p>
+                    <p><strong>Tarih:</strong> {{ expense.date }}</p>
+                    <p><strong>Kategori:</strong> {{ expense.category }}</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="{% url 'expense-edit' expense.pk %}" class="btn btn-primary">Düzenle</a>
+                    <a href="{% url 'expense-delete' expense.pk %}" class="btn btn-primary" style="background-color: #f44336;">Sil</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card">
+        <p>Henüz harcama kaydı eklenmemiş.</p>
+        <a href="{% url 'expense-create' %}" class="btn btn-primary" style="margin-top: 1rem;">İlk Harcama Kaydını Ekleyin</a>
+    </div>
+{% endif %}
+{% endblock %} 

@@ -1,0 +1,22 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}{{ task.get_task_type_display }} - Sil - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto;">
+    <h1>{{ task.get_task_type_display }} - Sil</h1>
+    
+    <div style="margin: 1.5rem 0;">
+        <p>{{ task.pet.name }} için "{{ task.get_task_type_display }}" bakım görevini silmek istediğinizden emin misiniz?</p>
+        <p style="color: #f44336; margin-top: 0.5rem;">Bu işlem geri alınamaz.</p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary" style="background-color: #f44336;">Evet, Sil</button>
+            <a href="{% url 'task-list' %}" class="btn btn-primary" style="background-color: #666;">İptal</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 

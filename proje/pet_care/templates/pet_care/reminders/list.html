@@ -1,0 +1,38 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}Hatırlatıcılar - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Hatırlatıcılar</h1>
+        <a href="{% url 'reminder-create' %}" class="btn btn-primary">Yeni Hatırlatıcı Ekle</a>
+    </div>
+</div>
+
+{% if reminders %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        {% for reminder in reminders %}
+            <div class="card">
+                <h2>{{ reminder.title }}</h2>
+                <div style="margin: 1rem 0;">
+                    <p><strong>Evcil Hayvan:</strong> {{ reminder.pet.name }}</p>
+                    <p><strong>Tarih:</strong> {{ reminder.reminder_date }}</p>
+                    {% if reminder.description %}
+                        <p><strong>Açıklama:</strong> {{ reminder.description }}</p>
+                    {% endif %}
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="{% url 'reminder-edit' reminder.pk %}" class="btn btn-primary">Düzenle</a>
+                    <a href="{% url 'reminder-delete' reminder.pk %}" class="btn btn-primary" style="background-color: #f44336;">Sil</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card">
+        <p>Henüz hatırlatıcı eklenmemiş.</p>
+        <a href="{% url 'reminder-create' %}" class="btn btn-primary" style="margin-top: 1rem;">İlk Hatırlatıcıyı Ekleyin</a>
+    </div>
+{% endif %}
+{% endblock %} 

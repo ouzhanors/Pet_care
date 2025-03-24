@@ -1,0 +1,60 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}Ana Sayfa - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Evcil Hayvan Bakım Takibine Hoş Geldiniz</h1>
+    <p>Evcil hayvanlarınızın bakımını kolayca takip edin.</p>
+</div>
+
+{% if user.is_authenticated %}
+    <div class="card">
+        <h2>Özet</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px;">
+                <h3>Evcil Hayvanlarım</h3>
+                <p>{{ pets.count }} evcil hayvan</p>
+                <a href="{% url 'pet-list' %}" class="btn btn-primary">Görüntüle</a>
+            </div>
+            
+            <div style="background: #fff3e0; padding: 1rem; border-radius: 8px;">
+                <h3>Bekleyen Görevler</h3>
+                <p>{{ pending_tasks.count }} görev</p>
+                <a href="{% url 'task-list' %}" class="btn btn-primary">Görüntüle</a>
+            </div>
+            
+            <div style="background: #e8f5e9; padding: 1rem; border-radius: 8px;">
+                <h3>Bu Ayki Harcamalar</h3>
+                <p>{{ monthly_expenses }} TL</p>
+                <a href="{% url 'expense-list' %}" class="btn btn-primary">Görüntüle</a>
+            </div>
+            
+            <div style="background: #fce4ec; padding: 1rem; border-radius: 8px;">
+                <h3>Yaklaşan Hatırlatıcılar</h3>
+                <p>{{ upcoming_reminders.count }} hatırlatıcı</p>
+                <a href="{% url 'reminder-list' %}" class="btn btn-primary">Görüntüle</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Hızlı İşlemler</h2>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="{% url 'pet-create' %}" class="btn btn-primary">Yeni Evcil Hayvan Ekle</a>
+            <a href="{% url 'task-create' %}" class="btn btn-primary">Yeni Görev Ekle</a>
+            <a href="{% url 'expense-create' %}" class="btn btn-primary">Yeni Harcama Ekle</a>
+            <a href="{% url 'reminder-create' %}" class="btn btn-primary">Yeni Hatırlatıcı Ekle</a>
+        </div>
+    </div>
+{% else %}
+    <div class="card">
+        <h2>Başlamak için giriş yapın</h2>
+        <p>Evcil hayvanlarınızın bakımını takip etmek için hesabınıza giriş yapın.</p>
+        <div style="margin-top: 1rem;">
+            <a href="{% url 'login' %}" class="btn btn-primary">Giriş Yap</a>
+            <a href="{% url 'register' %}" class="btn btn-primary" style="margin-left: 1rem;">Kayıt Ol</a>
+        </div>
+    </div>
+{% endif %}
+{% endblock %} 

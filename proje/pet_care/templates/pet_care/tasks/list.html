@@ -1,0 +1,43 @@
+{% extends 'pet_care/base.html' %}
+
+{% block title %}Bakım Görevleri - Evcil Hayvan Bakım Takibi{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Bakım Görevleri</h1>
+        <a href="{% url 'task-create' %}" class="btn btn-primary">Yeni Bakım Görevi Ekle</a>
+    </div>
+</div>
+
+{% if tasks %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        {% for task in tasks %}
+            <div class="card">
+                <h2>{{ task.get_task_type_display }}</h2>
+                <div style="margin: 1rem 0;">
+                    <p><strong>Evcil Hayvan:</strong> {{ task.pet.name }}</p>
+                    <p><strong>Açıklama:</strong> {{ task.description }}</p>
+                    <p><strong>Son Tarih:</strong> {{ task.due_date }}</p>
+                    <p><strong>Durum:</strong> {% if task.is_completed %}Tamamlandı{% else %}Bekliyor{% endif %}</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    {% if not task.is_completed %}
+                        <form method="post" action="{% url 'task-complete' task.pk %}" style="margin: 0;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary" style="background-color: #4caf50;">Tamamlandı</button>
+                        </form>
+                        <a href="{% url 'task-edit' task.pk %}" class="btn btn-primary">Düzenle</a>
+                    {% endif %}
+                    <a href="{% url 'task-delete' task.pk %}" class="btn btn-primary" style="background-color: #f44336;">Sil</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card">
+        <p>Henüz bakım görevi eklenmemiş.</p>
+        <a href="{% url 'task-create' %}" class="btn btn-primary" style="margin-top: 1rem;">İlk Bakım Görevini Ekleyin</a>
+    </div>
+{% endif %}
+{% endblock %} 
