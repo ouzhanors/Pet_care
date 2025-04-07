@@ -1,4 +1,3 @@
-"""
 URL configuration for pet_care_tracker project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -60,3 +59,4 @@ urlpatterns = [
     path('reminders/<int:pk>/edit/', reminder_edit, name='reminder-edit'),
     path('reminders/<int:pk>/delete/', reminder_delete, name='reminder-delete'),
 ]
+
