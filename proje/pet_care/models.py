@@ -11,9 +11,45 @@ class UserProfile(models.Model):
         return f"{self.user.username}'s profile"
 
 class Pet(models.Model):
+    SPECIES_CHOICES = [
+        ('Kedi', 'Kedi'),
+        ('Köpek', 'Köpek'),
+    ]
+    
+    CAT_BREEDS = [
+        ('Tekir', 'Tekir'),
+        ('Sarman', 'Sarman'),
+        ('Van Kedisi', 'Van Kedisi'),
+        ('British Shorthair', 'British Shorthair'),
+        ('Scottish Fold', 'Scottish Fold'),
+        ('Persian', 'Persian'),
+        ('Siamese', 'Siamese'),
+        ('Maine Coon', 'Maine Coon'),
+        ('Russian Blue', 'Russian Blue'),
+        ('Bengal', 'Bengal'),
+    ]
+    
+    DOG_BREEDS = [
+        ('Golden Retriever', 'Golden Retriever'),
+        ('Labrador Retriever', 'Labrador Retriever'),
+        ('German Shepherd', 'German Shepherd'),
+        ('French Bulldog', 'French Bulldog'),
+        ('Bulldog', 'Bulldog'),
+        ('Poodle', 'Poodle'),
+        ('Beagle', 'Beagle'),
+        ('Rottweiler', 'Rottweiler'),
+        ('Doberman', 'Doberman'),
+        ('Husky', 'Husky'),
+        ('Pitbull', 'Pitbull'),
+        ('Chihuahua', 'Chihuahua'),
+        ('Corgi', 'Corgi'),
+        ('Shih Tzu', 'Shih Tzu'),
+        ('Boxer', 'Boxer'),
+    ]
+
     name = models.CharField(max_length=100)
-    species = models.CharField(max_length=50)
-    breed = models.CharField(max_length=50)
+    species = models.CharField(max_length=50, choices=SPECIES_CHOICES)
+    breed = models.CharField(max_length=100)
     birth_date = models.DateField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
