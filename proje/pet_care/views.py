@@ -11,6 +11,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .models import Pet, CareTask, Expense, Reminder
 from .serializers import PetSerializer, CareTaskSerializer, ExpenseSerializer, ReminderSerializer
+import json
 
 def register(request):
     if request.method == 'POST':
@@ -86,18 +87,22 @@ def pet_create(request):
         
         if name and species and breed and birth_date:
             Pet.objects.create(
+                owner=request.user,
                 name=name,
                 species=species,
                 breed=breed,
-                birth_date=birth_date,
-                owner=request.user
+                birth_date=birth_date
             )
             messages.success(request, 'Evcil hayvan başarıyla eklendi!')
             return redirect('pet-list')
         else:
             messages.error(request, 'Lütfen tüm alanları doldurun.')
     
-    return render(request, 'pet_care/pets/form.html')
+    return render(request, 'pet_care/pets/form.html', {
+        'species_choices': Pet.SPECIES_CHOICES,
+        'cat_breeds': json.dumps(Pet.CAT_BREEDS),
+        'dog_breeds': json.dumps(Pet.DOG_BREEDS)
+    })
 
 @login_required
 def pet_edit(request, pk):
@@ -115,12 +120,17 @@ def pet_edit(request, pk):
             pet.breed = breed
             pet.birth_date = birth_date
             pet.save()
-            messages.success(request, 'Evcil hayvan bilgileri güncellendi!')
+            messages.success(request, 'Evcil hayvan güncellendi!')
             return redirect('pet-detail', pk=pet.pk)
         else:
             messages.error(request, 'Lütfen tüm alanları doldurun.')
     
-    return render(request, 'pet_care/pets/form.html', {'pet': pet})
+    return render(request, 'pet_care/pets/form.html', {
+        'pet': pet,
+        'species_choices': Pet.SPECIES_CHOICES,
+        'cat_breeds': json.dumps(Pet.CAT_BREEDS),
+        'dog_breeds': json.dumps(Pet.DOG_BREEDS)
+    })
 
 @login_required
 def pet_delete(request, pk):
@@ -415,6 +425,12 @@ class ReminderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Reminder.objects.filter(pet__owner=self.request.user)
+
+    @action(detail=True, methods=['post'])
+    def send_reminder(self, request, pk=None):
+        reminder = self.get_object()
+        return Response({'status': 'reminder sent'})
+
 
     @action(detail=True, methods=['post'])
     def send_reminder(self, request, pk=None):
